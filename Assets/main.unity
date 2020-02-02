@@ -986,9 +986,8 @@ MonoBehaviour:
   podDeployAnimActive: 0
   podParentDeployDuration: 1
   podKillDist: 50
-  podDeployLayers:
-    serializedVersion: 2
-    m_Bits: 0
+  podDefaultLayer: 9
+  podDeployLayer: 10
 --- !u!4 &1203477146
 Transform:
   m_ObjectHideFlags: 0
