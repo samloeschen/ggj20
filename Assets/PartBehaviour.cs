@@ -49,6 +49,8 @@ public class PartBehaviour : MonoBehaviour {
         }
         fixedJoint.enabled = true;
         fixedJoint.connectedBody = body;
+        GameManager.instance.musicManager.PlayAttachSound();
+        GameManager.instance.musicManager.PlayShout();
     }
 }
 

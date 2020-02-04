@@ -11,6 +11,8 @@ public class BoosterBehaviour : MonoBehaviour, IPartMovement {
     public float maxTorque;
     public PartBehaviour partBehaviour;
 
+    public new ParticleSystem particleSystem;
+
     bool _fire;
 
     void Awake() {
@@ -36,6 +38,14 @@ public class BoosterBehaviour : MonoBehaviour, IPartMovement {
         this.enabled = false;
     }
 
+    void OnEnable() {
+        particleSystem.Stop();
+    }
+
+    void OnDisable() {
+        particleSystem.Stop();
+    }
+
     public void Fire() {
         _fire = true;
     }
@@ -45,7 +55,18 @@ public class BoosterBehaviour : MonoBehaviour, IPartMovement {
         }
         if (_fire) {
             rigidbody.AddForce(transform.up * rocketForce);
+            if (particleSystem) {
+                var emission = particleSystem.emission;
+                emission.enabled = true;
+                particleSystem.Play();
+            }
             _fire = false;
+        } else {
+            if(particleSystem) {
+                var emission = particleSystem.emission;
+                emission.enabled = false;
+                particleSystem.Stop();
+            }
         }
         rigidbody.AddTorque(-Input.GetAxis("Horizontal") * rocketTorque);
         rigidbody.angularVelocity = Mathf.Max(Mathf.Abs(rigidbody.angularVelocity), maxTorque) * Mathf.Sign(rigidbody.angularVelocity);

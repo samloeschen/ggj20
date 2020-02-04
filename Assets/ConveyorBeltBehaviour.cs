@@ -20,6 +20,13 @@ public class ConveyorBeltBehaviour : MonoBehaviour {
     public Vector2 clearCheckOverlapSize;
 
 
+    public float oscillationFrequency;
+    public float oscillationDistance;
+    public float oscT;
+    public Vector3 oscPosA;
+    public Vector3 oscPosB;
+
+
     public ConveyorBeltBehaviour upConveyorBelt;
     public ConveyorBeltBehaviour downConveyorBelt;
     public ConveyorBeltBehaviour rightConveyorBelt;
@@ -72,6 +79,17 @@ public class ConveyorBeltBehaviour : MonoBehaviour {
     }
 
     void Update() {
+    }
+
+    void FixedUpdate() {
+
+
+        oscT += Time.deltaTime;
+        transform.position = Vector3.Lerp(
+            oscPosA,
+            oscPosB,
+            Mathf.Sin(oscT * oscillationFrequency) * 0.5f + 0.5f
+        );
         if (currentPart) {
             _partAnimTimer += Time.deltaTime / partAnimationTime;
             _partAnimTimer = Mathf.Min(_partAnimTimer, 1f);

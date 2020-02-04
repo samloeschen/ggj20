@@ -56,6 +56,8 @@ public class PodBehaviour : MonoBehaviour {
                 x = Mathf.Sin(t * xFrequency) * xMangitude * _magT,
                 y = Mathf.Cos(t * yFrequency) * yMagnitude * _magT
             };
+
+            rigidbody.rotation = Mathf.Sin(Time.time * 0.5f + _seed) * _magT * 10f;
         }
 
         if (_delayTimer > 0f) {

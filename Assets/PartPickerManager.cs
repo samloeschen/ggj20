@@ -11,6 +11,8 @@ public class PartPickerManager : MonoBehaviour {
 
     public Transform highlightTransform;
     public float highlightSmoothing;
+    public Vector3 highlightOffset;
+    public float highlightZ;
 
 
     void Start() {
@@ -35,11 +37,18 @@ public class PartPickerManager : MonoBehaviour {
         else if (yInput < 0) {
             next = currentConveyorBelt.GetAdjacent(Direction.Down);
         }
+
+        if (next && next != currentConveyorBelt) {
+            GameManager.instance.musicManager.PlayToggleSound();
+        }
+
         currentConveyorBelt = next ?? currentConveyorBelt;
+        var cpos = currentConveyorBelt.transform.position + highlightOffset;
+        cpos.z = highlightZ;
 
         highlightTransform.position = Vector3.Lerp(
             highlightTransform.position,
-            currentConveyorBelt.transform.position,
+            cpos,
             1f - Mathf.Exp(-highlightSmoothing * Time.deltaTime)
         );
 
@@ -48,6 +57,7 @@ public class PartPickerManager : MonoBehaviour {
                 if (part.TryGetComponent<CameraFocusTransform>(out var cameraFocusTransform)) {
                     cameraBehaviour.target = cameraFocusTransform;
                     this.enabled = false;
+                    GameManager.instance.musicManager.PlaySelectSound();
                 } else {
                     // do pick fail animation/sound
                 }

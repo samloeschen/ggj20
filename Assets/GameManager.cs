@@ -10,9 +10,15 @@ public class GameManager : MonoBehaviour {
     public CameraBehaviour cameraBehaviour;
     public Timer timer;
     public PodSpawner podSpawner;
+    public MusicManager musicManager;
 
     public PartBehaviour activePart;
     public PodBehaviour activePod;
+
+
+    public GameObject timerParent;
+    public GameObject titleParent;
+    public Renderer highlightRenderer;
 
 
     public float podKillDist;
@@ -35,12 +41,16 @@ public class GameManager : MonoBehaviour {
         cameraBehaviour = FindObjectOfType<CameraBehaviour>();
         timer = FindObjectOfType<Timer>();
         podSpawner = FindObjectOfType<PodSpawner>();
+        musicManager = FindObjectOfType<MusicManager>();
     }
 
     void OnEnable() {
+        GoToWaitState();
         waitingForGameStart = true;
         partPickerManager.enabled = false;
         timer.enabled = false;
+        titleParent.SetActive(true);
+        highlightRenderer.enabled = false;
     }
 
     void Update() {
@@ -76,6 +86,9 @@ public class GameManager : MonoBehaviour {
         cameraBehaviour.target = null;
         waitingForGameEnd = false;
         waitingForGameStart = true;
+        musicManager.PlayMainMenuMusic();
+
+        timerParent.SetActive(false);
     }
 
     public void GoToPickState() {
@@ -89,6 +102,8 @@ public class GameManager : MonoBehaviour {
         podSpawner.DeployPod();
         waitingForGameEnd = true;
         partPickerManager.enabled = false;
+        timerParent.SetActive(false);
+        highlightRenderer.enabled = false;
     }
 
     public void NewGame() {
@@ -98,5 +113,13 @@ public class GameManager : MonoBehaviour {
         timer.enabled = true;
         partPickerManager.enabled = true;
         waitingForGameStart = false;
+        titleParent.SetActive(false);
+        timerParent.SetActive(true);
+        highlightRenderer.enabled = true;
+
+
+        musicManager.PlayGameStinger();
+        musicManager.StopMainMenuMusic();
+        musicManager.PlayGameplayMusic();
     }
 }
